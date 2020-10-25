@@ -12,29 +12,38 @@ services:
     ports:
       - 5432:5432
     environment:
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
       - PGDATA=/tmp
       - POSTGRES_HOST_AUTH_METHOD=trust
     env_file:
       - ./env
 
-  web:
+  service:
     build: .
-    command: python manage.py runserver 0:8000
+    command: python manage.py runserver 0:6001
     restart: always
-    container_name: web
+    container_name: service
     working_dir: /code/
     volumes:
       - .:/code
     ports:
-      - 8000:8000
+      - 6001:6001
     depends_on:
       - postgres
     env_file:
       - ./env
 
+  web:
+    build: ./judge_web
+    command: ["npm", "start"]
+    volumes:
+      - ./judge_web/:/code
+    depends_on:
+      - service
+    ports:
+      - "3000:3000"
 volumes:
   postgres_data:
 

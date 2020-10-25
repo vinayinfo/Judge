@@ -3,7 +3,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 from django.db import models
-from phone_field import PhoneField
+from phonenumber_field.modelfields import PhoneNumberField
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractUser, UserManager
 from django.apps import apps
@@ -49,11 +49,12 @@ class UserType(models.Model):
 
 
 class Profiles(AbstractUser):
+    username = None
     user_type = models.ForeignKey(UserType, on_delete=models.CASCADE, blank=True)
     first_name = models.CharField(_('first name'), max_length=150)
     last_name = models.CharField(_('last name'), max_length=150)
     organisation = models.CharField(max_length=40)
-    phone = PhoneField(unique=True)
+    phone = PhoneNumberField(unique=True)
     USERNAME_FIELD = 'phone'
     REQUIRED_FIELDS = ['first_name', 'last_name', 'organisation']
     objects = ProfileManager()

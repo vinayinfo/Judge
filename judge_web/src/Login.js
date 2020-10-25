@@ -36,7 +36,7 @@ class LoginForm extends React.Component {
     Object.keys(errors).forEach((item, i) => {
       errors[item] = '';
     });
-    axios.post('http://localhost:8000/api-token-auth/',
+    axios.post('http://localhost:6001/api-token-auth/',
           { username: this.state.username, password: this.state.password },
           {headers: {'Content-Type': 'application/json'}}
       ).then(response => {
