@@ -32,6 +32,17 @@ services:
       - 6001:6001
     depends_on:
       - postgres
+      - migrate
+    env_file:
+      - ./env
+
+  migrate:
+    build: .
+    command: python manage.py migrate
+    container_name: migrate
+    working_dir: /code/
+    volumes:
+      - .:/code
     env_file:
       - ./env
 
